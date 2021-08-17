@@ -23,10 +23,12 @@ export class LinkService {
     return this.linkModel.findOne({ _id: linkId });
   }
 
-  async findUrlByShortUrl(shortenUrl: string): Promise<string> {
+  async findUrlByShortUrl(
+    shortenUrl: string,
+  ): Promise<{ originalUrl: string }> {
     Logger.debug({ shortenUrl }, 'QUERY');
     const link = await this.linkModel.findOne({ shortenUrl });
-    return link ? link.originalUrl : '';
+    return { originalUrl: link?.originalUrl ?? '' };
   }
 
   async createLink(input: CreateLinkDto[]) {

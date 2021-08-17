@@ -40,6 +40,9 @@ export class LinkController {
   @Post('/original-url')
   @UseFilters(new RpcValidationFilter())
   showOriginalUrl(@Payload() body: { shortenUrl: string }) {
+    if (!body.shortenUrl) {
+      throw new BadRequestException('shortenUrl must be provided.');
+    }
     return this.linkService.findUrlByShortUrl(body.shortenUrl);
   }
 
