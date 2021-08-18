@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: link-service
+spec:
+  selector:
+    matchLabels:
+      app: link-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: link-service
+    spec:
+      containers:
+        - name: link-service
+          image: kadekpradnyana/bonsai-link-mgmt
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          env:
+            - name: MONGODB_HOST
+              value: "localhost"
+            - name: MONGODB_PORT
+              value: "27017"
+            - name: MONGO_INITDB_DATABASE
+              value: "links"
+            - name: MONGO_INITDB_USERNAME
+              value: "dekjon"
+            - name: MONGO_INITDB_PASSWORD
+              value: "Dontlookback"
+          ports:
+            - containerPort: 3020
+            - containerPort: 4020
+        - name: link-db-service
+          image: kadekpradnyana/bonsai-link-table
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          env:
+            - name: MONGO_INITDB_USERNAME
+              value: "dekjon"
+            - name: MONGO_INITDB_PASSWORD
+              value: "Dontlookback"
+            - name: MONGO_INITDB_DATABASE
+              value: "links"
+          ports:
+            - containerPort: 27017
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: link-service
+spec:
+  type: NodePort
+  selector:
+    app: link-service
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3020
+      targetPort: 3020
+    - name: rpc
+      protocol: TCP
+      port: 4020
+      targetPort: 4020
