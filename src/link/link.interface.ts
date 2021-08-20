@@ -1,8 +1,3 @@
-import { Document } from 'mongoose';
-import { Link } from './link.schema';
-
-export type LinkDocument = Link & Document;
-
 export enum LinkStatus {
   READY = 'ready',
   BUILD = 'build',
@@ -20,6 +15,16 @@ export interface ILink {
   uiPreferences?: any;
   shortenUrl?: string;
   parentId?: string;
+  thumb?: string;
+  status?: LinkStatus;
+}
+
+export interface ILinkObject {
+  name: string;
+  userId: string;
+  url: string;
+  type: LinkType;
+  uiPreferences?: any;
   thumb?: string;
   status?: LinkStatus;
 }

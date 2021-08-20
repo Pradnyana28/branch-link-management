@@ -26,52 +26,61 @@ export class LinkController {
   @Get()
   @UseGuards(AuthGuard)
   @UseFilters(new RpcValidationFilter())
-  indexLink(@UserSession() user: any) {
-    return this.linkService.findAll(user.idUser);
+  async indexLink(@UserSession() user: any) {
+    const links = await this.linkService.findAll(user._id);
+    return { links };
   }
 
   @Get(':id')
   @UseGuards(AuthGuard)
   @UseFilters(new RpcValidationFilter())
-  showLink(@Param() params: Record<string, string>) {
-    return this.linkService.findOne(params.id);
+  async showLink(@Param() params: Record<string, string>) {
+    const link = await this.linkService.findOne(params.id);
+    return { link };
   }
 
   @Post('/original-url')
   @UseFilters(new RpcValidationFilter())
-  showOriginalUrl(@Payload() body: { shortenUrl: string }) {
+  async showOriginalUrl(@Payload() body: { shortenUrl: string }) {
     if (!body.shortenUrl) {
       throw new BadRequestException('shortenUrl must be provided.');
     }
-    return this.linkService.findUrlByShortUrl(body.shortenUrl);
+    const link = await this.linkService.findUrlByShortUrl(body.shortenUrl);
+    return { originalUrl: link?.url ?? '' };
   }
 
   @Post()
   @UseGuards(AuthGuard)
   @UsePipes(ValidationPipe)
-  createLink(@Payload() input: CreateLinkDto[]) {
+  async createLink(@Payload() input: CreateLinkDto) {
     // Maximum 10 links at the same time
-    if (input.length > 10) {
+    if (input.links.length > 10) {
       throw new BadRequestException(
         'Can only create 10 links at the same time',
       );
     }
-    return this.linkService.createLink(input);
+    const links = await this.linkService.createLink(input.links);
+    return { links };
   }
 
   @Put(':id')
   @UseGuards(AuthGuard)
   @UsePipes(ValidationPipe)
-  updateLink(
+  async updateLink(
     @Param() params: Record<string, string>,
     @Payload() input: UpdateLinkDto,
   ) {
-    return this.linkService.updateLink(params.id, input);
+    if (!Object.keys(input).length) {
+      return { message: 'No changes need to be update' };
+    }
+    await this.linkService.updateLink(params.id, input);
+    return { message: 'Link successfully updated' };
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard)
-  deleteLink(@Param() params: Record<string, string>) {
-    return this.linkService.deleteLink(params.id);
+  async deleteLink(@Param() params: Record<string, string>) {
+    await this.linkService.deleteLink(params.id);
+    return true;
   }
 }

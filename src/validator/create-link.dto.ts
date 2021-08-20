@@ -1,13 +1,17 @@
+import { Type } from 'class-transformer';
 import {
+  ArrayNotEmpty,
+  IsArray,
   IsMongoId,
   IsNotEmpty,
   IsOptional,
   IsString,
   IsUrl,
+  ValidateNested,
 } from 'class-validator';
 import { ILink, LinkType } from 'src/link/link.interface';
 
-export class CreateLinkDto implements ILink {
+export class CreateLinkItemDto implements ILink {
   @IsString()
   @IsNotEmpty()
   name: string;
@@ -24,6 +28,7 @@ export class CreateLinkDto implements ILink {
 
   @IsString()
   @IsNotEmpty()
+  @IsOptional()
   type: LinkType;
 
   @IsString()
@@ -42,4 +47,11 @@ export class CreateLinkDto implements ILink {
   @IsString()
   @IsOptional()
   thumb?: string;
+}
+export class CreateLinkDto {
+  @IsArray()
+  @ArrayNotEmpty()
+  @Type(() => CreateLinkItemDto)
+  @ValidateNested({ each: true })
+  public links: CreateLinkItemDto[];
 }

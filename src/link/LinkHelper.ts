@@ -1,4 +1,4 @@
-import str from '@supercharge/strings';
+import * as str from '@supercharge/strings';
 
 class LinkHelper {
   private shortenDomain = 'https://bnsai.link';

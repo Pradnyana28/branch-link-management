@@ -1,7 +1,7 @@
 import { IsMongoId, IsOptional, IsString, IsUrl } from 'class-validator';
 import { ILink, LinkType } from 'src/link/link.interface';
 
-export class UpdateLinkDto implements ILink {
+export class UpdateLinkDto implements Partial<ILink> {
   @IsString()
   @IsOptional()
   name: string;
@@ -14,7 +14,7 @@ export class UpdateLinkDto implements ILink {
   @IsString()
   @IsOptional()
   @IsUrl()
-  originalUrl: string;
+  url: string;
 
   @IsString()
   @IsOptional()
@@ -23,11 +23,6 @@ export class UpdateLinkDto implements ILink {
   @IsString()
   @IsOptional()
   uiPreferences?: string;
-
-  @IsString()
-  @IsOptional()
-  @IsUrl()
-  shortenUrl?: string;
 
   @IsString()
   @IsOptional()

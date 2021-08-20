@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { ILink, LinkStatus, LinkType } from './link.interface';
 
-export type UserDocument = Link & Document;
+export type LinkDocument = Link & Document;
 
 @Schema()
 export class Link implements ILink {
