@@ -2,7 +2,7 @@ version: "3"
 
 services:
   mongo:
-    container_name: bonsai-mongo
+    container_name: bonsai-link-mongo
     image: kadekpradnyana/bonsai-link-table
     restart: always
     env_file:
@@ -21,12 +21,12 @@ services:
   link-service:
     container_name: bonsai-link-mgmt
     restart: always
-    # image: kadekpradnyana/bonsai-user-mgmt
+    # image: kadekpradnyana/bonsai-link-mgmt
     build: 
       context: .
       dockerfile: ./Dockerfile.dev
     volumes:
-      - /bonsai/user/node_modules
+      - /bonsai/link/node_modules
       - .:/bonsai/link
     ports:
       - 3020:3020

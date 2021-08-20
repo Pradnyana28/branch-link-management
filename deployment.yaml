@@ -13,6 +13,21 @@ spec:
         app: link-service
     spec:
       containers:
+        - name: link-db-service
+          image: kadekpradnyana/bonsai-link-table
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          env:
+            - name: MONGO_INITDB_USERNAME
+              value: "dekjon"
+            - name: MONGO_INITDB_PASSWORD
+              value: "Dontlookback"
+            - name: MONGO_INITDB_DATABASE
+              value: "links"
+          ports:
+            - containerPort: 27017
         - name: link-service
           image: kadekpradnyana/bonsai-link-mgmt
           resources:
@@ -33,21 +48,6 @@ spec:
           ports:
             - containerPort: 3020
             - containerPort: 4020
-        - name: link-db-service
-          image: kadekpradnyana/bonsai-link-table
-          resources:
-            limits:
-              memory: "512Mi"
-              cpu: "500m"
-          env:
-            - name: MONGO_INITDB_USERNAME
-              value: "dekjon"
-            - name: MONGO_INITDB_PASSWORD
-              value: "Dontlookback"
-            - name: MONGO_INITDB_DATABASE
-              value: "links"
-          ports:
-            - containerPort: 27017
 
 ---
 apiVersion: v1

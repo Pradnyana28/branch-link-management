@@ -1,6 +1,6 @@
 FROM node:alpine
 
-WORKDIR /bonsai/auth
+WORKDIR /bonsai/link
 
 COPY package.json .
 
