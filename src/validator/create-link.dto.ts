@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
 import {
+  ArrayMaxSize,
   ArrayNotEmpty,
   IsArray,
   IsMongoId,
@@ -51,6 +52,7 @@ export class CreateLinkItemDto implements ILink {
 export class CreateLinkDto {
   @IsArray()
   @ArrayNotEmpty()
+  @ArrayMaxSize(10, { message: 'Can only create 10 links at the same time' })
   @Type(() => CreateLinkItemDto)
   @ValidateNested({ each: true })
   public links: CreateLinkItemDto[];

@@ -53,12 +53,6 @@ export class LinkController {
   @UseGuards(AuthGuard)
   @UsePipes(ValidationPipe)
   async createLink(@Payload() input: CreateLinkDto) {
-    // Maximum 10 links at the same time
-    if (input.links.length > 10) {
-      throw new BadRequestException(
-        'Can only create 10 links at the same time',
-      );
-    }
     const links = await this.linkService.createLink(input.links);
     return { links };
   }
